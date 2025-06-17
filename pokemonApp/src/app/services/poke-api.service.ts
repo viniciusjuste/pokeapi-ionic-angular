@@ -39,4 +39,13 @@ export class PokeApiService {
     const id = this.getPokemonId(pokemonUrl);
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
   }
+
+  /**
+   * Fetches the details of a Pokemon from the PokeAPI.
+   * @param pokemonUrl the PokeAPI url of the Pokemon
+   * @returns an observable of the Pokemon details
+   */
+  getPokemonDetail(pokemonUrl: string) {
+    return this.http.get<any>(pokemonUrl);
+  }
 }
