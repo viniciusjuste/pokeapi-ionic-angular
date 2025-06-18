@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { forkJoin } from 'rxjs';
 import { PokeApiService } from 'src/app/services/poke-api.service';
@@ -13,7 +14,7 @@ import { PokeApiService } from 'src/app/services/poke-api.service';
 })
 export class PokemonListComponent implements OnInit {
 
-  constructor(private pokeApiService: PokeApiService) { }
+  constructor(private pokeApiService: PokeApiService, private router : Router) { }
 
   typeColors: { [key: string]: string } = {
     normal: '#A8A77A',
@@ -41,7 +42,7 @@ export class PokemonListComponent implements OnInit {
   pokemonList: any[] = [];
   loading = false;
 
-  searchTerm = "";
+  searchTerm = "";    
   selectedOrder: string = '';
 
 
@@ -118,6 +119,10 @@ export class PokemonListComponent implements OnInit {
         this.loadPokemons();
         break;
     }
+  }
+
+  goToDetails(pokemonName : string){
+    this.router.navigate(['pokemon-details', pokemonName]);
   }
 }
 
