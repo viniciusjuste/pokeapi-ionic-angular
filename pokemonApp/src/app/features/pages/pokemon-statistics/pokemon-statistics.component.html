@@ -1,3 +1,66 @@
-<p>
-  pokemon-statistics works!
-</p>
+<ion-content *ngIf="pokemon" class="ion-padding">
+
+  <!-- Image and name -->
+  <ion-card class="h-64 flex justify-center items-center">
+    <img class="w-60 h-64 object-cover" [src]="pokemon.sprites.front_default" [alt]="pokemon.name">
+    <ion-text class="my-auto flex flex-col">
+      <span class="block font-extrabold">#{{ pokemon.id }}</span>
+      <span class="block font-extrabold uppercase">{{ pokemon?.name }}</span>
+      <div class="types-wrapper">
+        <span *ngFor="let type of pokemon.types" class="text-white py-2 pr-4 rounded-md inline-block mr-4">
+          {{ type.type.name }}
+        </span>
+      </div>
+    </ion-text>
+  </ion-card>
+
+  <!-- Statistics -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Estatísticas</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let stat of pokemon.stats">
+            <ion-label>
+              {{ stat.stat.name | titlecase }}: {{ stat.base_stat }}
+              <ion-progress-bar [value]="getStatPercentage(stat.base_stat)" color="primary" class="stat-bar">
+              </ion-progress-bar>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Informações Gerais</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Height: {{ pokemon.height / 10 }} m</p>
+        <p>Weight: {{ pokemon.weight / 10 }} kg</p>
+        <p><strong>Abilities:</strong></p>
+        <ul>
+          <li *ngFor="let ability of pokemon.abilities">
+            {{ ability.ability.name }}
+          </li>
+        </ul>
+        <p><strong>Moves:</strong></p>
+        <ul>
+          <li *ngFor="let move of pokemon.moves.slice(0, 5)">
+            {{ move.move.name }}
+          </li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Sprites pokemon -->
+  <ion-card class="h-64 flex justify-center items-center">
+    <ion-img class="w-60 h-64 object-cover" [src]="pokemon.sprites.front_default" alt="Normal Front"></ion-img>
+    <ion-img class="w-60 h-64 object-cover" [src]="pokemon.sprites.back_default" alt="Normal Back"></ion-img>
+    <ion-img class="w-60 h-64 object-cover" [src]="pokemon.sprites.front_shiny" alt="Shiny Front"></ion-img>
+    <ion-img class="w-60 h-64 object-cover" [src]="pokemon.sprites.back_shiny" alt="Shiny Back"></ion-img>
+  </ion-card>
+  
+</ion-content>
