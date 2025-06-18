@@ -20,23 +20,14 @@ export class PokeApiService {
     return this.http.get<any>(`${this.baseUrl}?limit=${limit}&offset=${offset}`);
   }
 
-  /**
-   * Returns the id of a Pokemon given its PokeAPI url.
-   * @param pokemonUrl the PokeAPI url of the Pokemon
-   * @returns the id of the Pokemon
-   */
-  getPokemonId(pokemonUrl: string) {
-    const parts = pokemonUrl.split('/');
-    return parts[parts.length - 2];
-  }
 
   /**
-   * Returns the image URL of a Pokemon given its PokeAPI url.
-   * @param pokemonUrl the PokeAPI url of the Pokemon
-   * @returns the URL of the Pokemon image
+   * Given a Pokemon object, returns a string representing the URL of its corresponding image from the PokeAPI.
+   * @param pokemon the Pokemon object
+   * @returns a string URL of the Pokemon image
    */
-  getPokemonImage(pokemonUrl: string) {
-    const id = this.getPokemonId(pokemonUrl);
+  getPokemonImage(pokemon: any): string {
+    const id = pokemon.id;
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
   }
 
@@ -45,7 +36,7 @@ export class PokeApiService {
    * @param pokemonUrl the PokeAPI url of the Pokemon
    * @returns an observable of the Pokemon details
    */
-  getPokemonDetail(pokemonUrl: string) {
-    return this.http.get<any>(pokemonUrl);
+  getPokemonDetails(url: string): Observable<any> {
+    return this.http.get<any>(url);
   }
 }
