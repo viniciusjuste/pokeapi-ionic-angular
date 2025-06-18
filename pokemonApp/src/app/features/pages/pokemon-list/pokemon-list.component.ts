@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { forkJoin } from 'rxjs';
 import { PokeApiService } from 'src/app/services/poke-api.service';
 
 @Component({
@@ -14,12 +15,33 @@ export class PokemonListComponent implements OnInit {
 
   constructor(private pokeApiService: PokeApiService) { }
 
+  typeColors: { [key: string]: string } = {
+    normal: '#A8A77A',
+    fire: '#EE8130',
+    water: '#6390F0',
+    electric: '#F7D02C',
+    grass: '#7AC74C',
+    ice: '#96D9D6',
+    fighting: '#C22E28',
+    poison: '#A33EA1',
+    ground: '#E2BF65',
+    flying: '#A98FF3',
+    psychic: '#F95587',
+    bug: '#A6B91A',
+    rock: '#B6A136',
+    ghost: '#735797',
+    dragon: '#6F35FC',
+    dark: '#705746',
+    steel: '#B7B7CE',
+    fairy: '#D685AD'
+  };
+
   limit = 10;
   offset = 0;
   pokemonList: any[] = [];
   loading = false;
 
-  searchName = "";
+  searchTerm = "";
   selectedOrder: string = '';
 
 
@@ -35,18 +57,30 @@ export class PokemonListComponent implements OnInit {
     this.loading = true;
     this.getPokemonList(this.limit, this.offset).subscribe({
       next: (response) => {
-        this.pokemonList = [...this.pokemonList, ...response.results];
-        this.loading = false;
+        const requests = response.results.map((pokemon: any) => this.pokeApiService.getPokemonDetails(pokemon.url));
+        console.log('Requests:', requests);
+
+        forkJoin(requests).subscribe({
+          next: (detailsList: any) => {
+            this.pokemonList = [...this.pokemonList, ...detailsList];
+            console.log(this.pokemonList);
+            this.loading = false;
+          },
+          error: (error) => {
+            console.error(error);
+            this.loading = false;
+          }
+        });
       },
       error: (error) => {
         console.error(error);
         this.loading = false;
       }
-    })
+    });
   }
 
-  getPokemonImage(pokemonUrl: string) {
-    return this.pokeApiService.getPokemonImage(pokemonUrl);
+  getPokemonImage(pokemon: any) {
+    return this.pokeApiService.getPokemonImage(pokemon);
   }
 
   loadNextPage() {
@@ -55,12 +89,19 @@ export class PokemonListComponent implements OnInit {
   }
 
   filterByName() {
-    if (this.searchName === "") {
+    if (this.searchTerm === "") {
       this.pokemonList = [];
+      this.offset = 0;
       this.loadPokemons();
       return;
     }
-    this.pokemonList = this.pokemonList.filter(pokemon => pokemon.name.toLowerCase().includes(this.searchName.toLowerCase()));
+
+    const searchLower = this.searchTerm.toLowerCase();
+
+    this.pokemonList = this.pokemonList.filter(pokemon =>
+      pokemon.name.toLowerCase().includes(searchLower) ||
+      pokemon.types.some((t: any) => t.type.name.toLowerCase().includes(searchLower))
+    );
   }
 
   applySort() {

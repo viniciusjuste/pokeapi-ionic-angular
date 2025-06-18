@@ -1,11 +1,13 @@
 <div class="input-wrapper mb-4 mt-4 p-4">
+  <!-- Input search -->
   <div class="input-wrapper mb-4 mt-4 p-4">
-    <ion-input [(ngModel)]="searchName" placeholder="Search by name" (ngModelChange)="filterByName()"></ion-input>
+    <ion-input [(ngModel)]="searchTerm" placeholder="Search by name or type"
+      (ngModelChange)="filterByName()"></ion-input>
   </div>
 
   <!-- Ion Select to choose the type of sorting -->
   <ion-item class="mb-4">
-    <ion-label class="w-[1rem]">Sort by</ion-label>
+    <ion-label class="w-[1rem]">Sort by:</ion-label>
     <ion-select [(ngModel)]="selectedOrder" (ionChange)="applySort()">
       <ion-select-option value="az">A-Z</ion-select-option>
       <ion-select-option value="za">Z-A</ion-select-option>
@@ -13,23 +15,28 @@
     </ion-select>
   </ion-item>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 justify-items-center
-">
+  <!-- Pokemon List -->
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 justify-items-center">
     <ion-card *ngFor="let pokemon of pokemonList"
       class="w-[80%] md:w-[15rem] cursor-pointer hover:scale-105 transition-all duration-300">
       <div class="image-wrapper w-full text-center">
-        <img [alt]="pokemon.name" class="w-full h-68 object-cover" [src]="getPokemonImage(pokemon.url)" />
+        <img *ngIf="pokemon.id" [alt]="pokemon.name" class="w-full h-68 pt-8 object-cover"
+          [src]="getPokemonImage(pokemon)" />
       </div>
       <ion-card-header>
         <ion-card-title>{{ pokemon.name }}</ion-card-title>
       </ion-card-header>
 
       <ion-card-content>
-        Here's a small text description for the card content. Nothing more, nothing less.
+        <p *ngFor="let type of pokemon.types" class="text-white py-2 px-4 rounded-md inline-block !mr-4
+" [ngStyle]="{'background-color': typeColors[type.type.name]}">
+          <span>{{ type.type.name }}</span>
+        </p>
       </ion-card-content>
     </ion-card>
   </div>
 
+  <!-- Pagination button -->
   <div class="button-wrapper w-full justify-items-center text-center mt-8">
     <ion-button (click)="loadNextPage()" [disabled]="loading">
       {{ loading ? 'Carregando...' : 'Carregar mais' }}
