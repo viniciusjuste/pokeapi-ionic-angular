@@ -64,7 +64,6 @@ export class PokemonListComponent implements OnInit {
         forkJoin(requests).subscribe({
           next: (detailsList: any) => {
             this.pokemonList = [...this.pokemonList, ...detailsList];
-            console.log(this.pokemonList);
             this.loading = false;
           },
           error: (error) => {
@@ -94,16 +93,27 @@ export class PokemonListComponent implements OnInit {
       this.pokemonList = [];
       this.offset = 0;
       this.loadPokemons();
+      console.log("vazio")
       return;
     }
 
-    const searchLower = this.searchTerm.toLowerCase();
-
-    this.pokemonList = this.pokemonList.filter(pokemon =>
-      pokemon.name.toLowerCase().includes(searchLower) ||
-      pokemon.types.some((t: any) => t.type.name.toLowerCase().includes(searchLower))
-    );
+    this.pokeApiService.getAllPokemonsByName(this.searchTerm).subscribe({
+      next: (response) => {
+        this.pokemonList = [response];
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
   }
+
+  onSearchTermChange() {
+  if (this.searchTerm.trim() === "") {
+    this.pokemonList = [];
+    this.offset = 0;
+    this.loadPokemons();
+  }
+}
 
   applySort() {
     switch (this.selectedOrder) {
