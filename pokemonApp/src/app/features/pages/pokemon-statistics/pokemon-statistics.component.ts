@@ -1,9 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-pokemon-statistics',
+  imports: [IonicModule, CommonModule],
   templateUrl: './pokemon-statistics.component.html',
   styleUrls: ['./pokemon-statistics.component.scss'],
 })
@@ -20,4 +23,8 @@ export class PokemonStatisticsComponent implements OnInit {
     });
   }
 
+  getStatPercentage(statValue: number): number {
+    const maxStat = 200; 
+    return statValue / maxStat;
+  }
 }
