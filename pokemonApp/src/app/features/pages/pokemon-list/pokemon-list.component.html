@@ -17,7 +17,7 @@
 
   <!-- Pokemon List -->
   <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 justify-items-center">
-    <ion-card *ngFor="let pokemon of pokemonList"
+    <ion-card *ngFor="let pokemon of pokemonList" (click)="goToDetails(pokemon.name)"
       class="w-[80%] md:w-[15rem] cursor-pointer hover:scale-105 transition-all duration-300">
       <div class="image-wrapper w-full text-center">
         <img *ngIf="pokemon.id" [alt]="pokemon.name" class="w-full h-68 pt-8 object-cover"
