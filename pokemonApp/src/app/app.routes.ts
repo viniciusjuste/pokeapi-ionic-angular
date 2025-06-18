@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { PokemonStatisticsComponent } from './features/pages/pokemon-statistics/pokemon-statistics.component';
 
 export const routes: Routes = [
   {
@@ -10,4 +11,7 @@ export const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
+  {
+    path: 'pokemon-details/:name', component: PokemonStatisticsComponent
+  }
 ];
