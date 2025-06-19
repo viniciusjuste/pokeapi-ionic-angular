@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
+import { PokeApiService } from './poke-api.service';
+import { forkJoin } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FavoriteService {
   storageKey = 'favoritePokemons';
+  favoritePokemons: any[] = [];
 
-  constructor() { }
+  constructor(private pokeApiService: PokeApiService) { }
 
   /**
    * Retrieves the list of favorite Pokemon IDs from local storage.
@@ -15,6 +18,23 @@ export class FavoriteService {
   getFavoritePokemons(): any[] {
     const favoritePokemons = localStorage.getItem('favoritePokemons');
     return favoritePokemons ? JSON.parse(favoritePokemons) : [];
+  }
+
+  storeFavoritePokemons(pokemons: any[]) {
+    const pokemonId = pokemons;
+    const request = pokemonId.map(id => this.pokeApiService.getAllPokemonsByNameOrId(id));
+
+    if (request.length > 0) {
+      forkJoin(request).subscribe((pokemons: any) => {
+        this.favoritePokemons = pokemons;
+      });
+    } else {
+      this.favoritePokemons = [];
+    }
+  }
+
+  showStoragePokemons() {
+    return this.favoritePokemons;
   }
 
   /**

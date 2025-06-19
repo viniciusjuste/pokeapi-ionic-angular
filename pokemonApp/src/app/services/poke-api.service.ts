@@ -21,7 +21,6 @@ export class PokeApiService {
     return this.http.get<any>(`${this.baseUrl}?limit=${limit}&offset=${offset}`);
   }
 
-
   /**
    * Given a Pokemon object, returns a string representing the URL of its corresponding image from the PokeAPI.
    * @param pokemon the Pokemon object

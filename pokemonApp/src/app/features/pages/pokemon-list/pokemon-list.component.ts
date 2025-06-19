@@ -175,6 +175,7 @@ export class PokemonListComponent implements OnInit {
     event.stopPropagation();
     this.favoriteService.toggleFavorite(pokemon.id);
     this.favoritePokemons = this.favoriteService.getFavoritePokemons();
+    this.favoriteService.storeFavoritePokemons(this.favoritePokemons);
   }
 
   /**
