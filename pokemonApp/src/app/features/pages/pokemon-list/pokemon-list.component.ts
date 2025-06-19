@@ -122,7 +122,7 @@ export class PokemonListComponent implements OnInit {
       return;
     }
 
-    this.pokeApiService.getAllPokemonsByName(this.searchTerm).subscribe({
+    this.pokeApiService.getAllPokemonsByNameOrId(this.searchTerm).subscribe({
       next: (response) => {
         this.pokemonList = [response];
       },
