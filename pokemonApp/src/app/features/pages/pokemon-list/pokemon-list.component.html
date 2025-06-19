@@ -29,8 +29,8 @@
       class="w-[80%] md:w-[15rem] cursor-pointer hover:scale-105 transition-all duration-300">
       <div class="flex justify-between items-center p-4">
         <span class="text-1xl">#{{ pokemon.id }}</span>
-        <fa-icon class="text-2xl z-20" [ngClass]="{'text-red-500': favoritePokemons.includes(pokemon.id)}" [icon]="faStar"
-          (click)="onStarClick($event, pokemon)"></fa-icon>
+        <fa-icon class="text-2xl z-20" [ngClass]="{'text-red-500': favoritePokemons.includes(pokemon.id)}"
+          [icon]="faStar" (click)="onStarClick($event, pokemon)"></fa-icon>
       </div>
       <div class="image-wrapper w-full text-center">
         <img *ngIf="pokemon.id" [alt]="pokemon.name" class="w-full h-68 pt-8 object-cover"
@@ -42,7 +42,7 @@
 
       <ion-card-content>
         <p *ngFor="let type of pokemon.types" class="text-white py-2 px-4 rounded-md inline-block !mr-4"
-          [ngStyle]="{'background-color': typeColors[type.type.name]}">
+          [ngStyle]="{'background-color': getTypeColor(type.type.name)}">
           <span>{{ type.type.name }}</span>
         </p>
       </ion-card-content>

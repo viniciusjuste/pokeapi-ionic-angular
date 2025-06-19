@@ -8,6 +8,7 @@ import { PokeApiService } from 'src/app/services/poke-api.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FavoriteService } from 'src/app/services/favorite.service';
+import { PokemonTypeColorService } from 'src/app/services/pokemon-type-color.service';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -28,34 +29,16 @@ export class PokemonListComponent implements OnInit {
   selectedOrder: string = '';
   favoritePokemons: number[] = [];
 
-  // Color mapping by type
-  typeColors: { [key: string]: string } = {
-    normal: '#A8A77A',
-    fire: '#EE8130',
-    water: '#6390F0',
-    electric: '#F7D02C',
-    grass: '#7AC74C',
-    ice: '#96D9D6',
-    fighting: '#C22E28',
-    poison: '#A33EA1',
-    ground: '#E2BF65',
-    flying: '#A98FF3',
-    psychic: '#F95587',
-    bug: '#A6B91A',
-    rock: '#B6A136',
-    ghost: '#735797',
-    dragon: '#6F35FC',
-    dark: '#705746',
-    steel: '#B7B7CE',
-    fairy: '#D685AD'
-  };
-
-  constructor(private pokeApiService: PokeApiService, private favoriteService: FavoriteService) { }
+  constructor(private pokeApiService: PokeApiService, private favoriteService: FavoriteService, private typeColorService: PokemonTypeColorService) { }
 
   ngOnInit() {
     this.loadPokemons();
     this.favoritePokemons = this.favoriteService.getFavoritePokemons();
   }
+
+  getTypeColor(type: string): string {
+  return this.typeColorService.getColor(type);
+}
 
   /**
    * Returns an observable of the Pokemon list
