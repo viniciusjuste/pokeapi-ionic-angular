@@ -36,9 +36,32 @@ export class PokemonListComponent implements OnInit {
     this.favoritePokemons = this.favoriteService.getFavoritePokemons();
   }
 
+  /**
+   * Returns the color for the given Pokemon type.
+   * @param type the Pokemon type
+   * @returns the color for the given Pokemon type
+   */
   getTypeColor(type: string): string {
-  return this.typeColorService.getColor(type);
-}
+    return this.typeColorService.getColor(type);
+  }
+
+  /**
+  * Generates a diagonal CSS linear gradient based on the Pokémon's types.
+  * - For Pokémon with a single type: creates a gradient from the type color to transparent.
+  * - For Pokémon with two types: creates a gradient blending both type colors.
+  * The gradient flows from top-left (0%) to bottom-right (100%).
+  * @param types - An array of Pokémon types (expected format: array of objects with `type.name` string property).
+  * @returns A CSS linear-gradient string to be used as the card background.
+  */
+  getCardBackground(types: any[]): string {
+    const colors = types.map(t => this.typeColorService.getColor(t?.type?.name || ''));
+
+    if (colors.length === 1) {
+      return `linear-gradient(135deg, ${colors[0]} 0%, transparent 100%)`;
+    } else {
+      return `linear-gradient(135deg, ${colors[0]} 0%, ${colors[1]} 100%)`;
+    }
+  }
 
   /**
    * Returns an observable of the Pokemon list

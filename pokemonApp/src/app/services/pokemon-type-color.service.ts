@@ -29,6 +29,6 @@ export class PokemonTypeColorService {
   };
 
   getColor(type: string): string {
-    return this.typeColors[type] || '#000000'; 
+    return this.typeColors[type.trim()] || '#FFFFFF';
   }
 }
