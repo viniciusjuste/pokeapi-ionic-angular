@@ -5,15 +5,18 @@ import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { forkJoin } from 'rxjs';
 import { PokeApiService } from 'src/app/services/poke-api.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-pokemon-list',
-  imports: [IonicModule, CommonModule, FormsModule],
+  imports: [IonicModule, CommonModule, FormsModule, FontAwesomeModule],
   templateUrl: './pokemon-list.component.html',
   styleUrls: ['./pokemon-list.component.scss'],
 })
 export class PokemonListComponent implements OnInit {
 
+faMagnifyingGlass = faMagnifyingGlass;
   constructor(private pokeApiService: PokeApiService, private router : Router) { }
 
   typeColors: { [key: string]: string } = {
