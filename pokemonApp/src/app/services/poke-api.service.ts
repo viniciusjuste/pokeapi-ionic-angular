@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -8,7 +9,7 @@ import { Observable } from 'rxjs';
 export class PokeApiService {
   private baseUrl = 'https://pokeapi.co/api/v2/pokemon/';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   /**
    * Fetches a list of Pokemon from the PokeAPI.
@@ -42,5 +43,9 @@ export class PokeApiService {
 
   getAllPokemonsByName(name : string): Observable<any> {
     return this.http.get<any>(`https://pokeapi.co/api/v2/pokemon/${name}`);
+  }
+
+   goToDetails(pokemonName : string){
+    this.router.navigate(['pokemon-details', pokemonName]);
   }
 }

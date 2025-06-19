@@ -6,7 +6,8 @@ import { IonicModule } from '@ionic/angular';
 import { forkJoin } from 'rxjs';
 import { PokeApiService } from 'src/app/services/poke-api.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faStar } from '@fortawesome/free-solid-svg-icons';
+import { FavoriteService } from 'src/app/services/favorite.service';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -16,9 +17,18 @@ import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons';
 })
 export class PokemonListComponent implements OnInit {
 
-faMagnifyingGlass = faMagnifyingGlass;
-  constructor(private pokeApiService: PokeApiService, private router : Router) { }
+  faMagnifyingGlass = faMagnifyingGlass;
+  faStar = faStar;
 
+  limit = 10;
+  offset = 0;
+  pokemonList: any[] = [];
+  loading = false;
+  searchTerm = "";
+  selectedOrder: string = '';
+  favoritePokemons: number[] = [];
+
+  // Color mapping by type
   typeColors: { [key: string]: string } = {
     normal: '#A8A77A',
     fire: '#EE8130',
@@ -40,29 +50,36 @@ faMagnifyingGlass = faMagnifyingGlass;
     fairy: '#D685AD'
   };
 
-  limit = 10;
-  offset = 0;
-  pokemonList: any[] = [];
-  loading = false;
-
-  searchTerm = "";    
-  selectedOrder: string = '';
-
+  constructor(private pokeApiService: PokeApiService, private favoriteService: FavoriteService) { }
 
   ngOnInit() {
     this.loadPokemons();
+    this.favoritePokemons = this.favoriteService.getFavoritePokemons();
   }
 
+  /**
+   * Returns an observable of the Pokemon list
+   * @param limit the maximum number of Pokemon to return
+   * @param offset the starting index of the Pokemon to return
+   * @returns an observable of the Pokemon list
+   */
   getPokemonList(limit: number, offset: number) {
     return this.pokeApiService.getPokemonList(limit, offset);
   }
 
+  /**
+   * Loads the next page of Pokemon, or the first page if this.offset is 0.
+   * This function is used to load the Pokemon list when the user navigates to the Pokemon list page,
+   * or when the user clicks the "Load more" button.
+   * @returns an observable of the Pokemon list
+   */
   loadPokemons() {
     this.loading = true;
     this.getPokemonList(this.limit, this.offset).subscribe({
       next: (response) => {
-        const requests = response.results.map((pokemon: any) => this.pokeApiService.getPokemonDetails(pokemon.url));
-        console.log('Requests:', requests);
+        const requests = response.results.map((pokemon: any) =>
+          this.pokeApiService.getPokemonDetails(pokemon.url)
+        );
 
         forkJoin(requests).subscribe({
           next: (detailsList: any) => {
@@ -82,21 +99,20 @@ faMagnifyingGlass = faMagnifyingGlass;
     });
   }
 
-  getPokemonImage(pokemon: any) {
-    return this.pokeApiService.getPokemonImage(pokemon);
-  }
-
   loadNextPage() {
     this.offset += this.limit;
     this.loadPokemons();
   }
 
+  /**
+   * Filters the Pokemon list to only show Pokemon with a name matching the `searchTerm`.
+   * @returns an observable of the filtered Pokemon list
+   */
   filterByName() {
     if (this.searchTerm === "") {
       this.pokemonList = [];
       this.offset = 0;
       this.loadPokemons();
-      console.log("vazio")
       return;
     }
 
@@ -107,17 +123,27 @@ faMagnifyingGlass = faMagnifyingGlass;
       error: (error) => {
         console.error(error);
       }
-    })
+    });
   }
 
+  /**
+   * Resets the Pokemon list and offset if the search term is empty or only whitespace.
+   * This triggers a reload of the Pokemon list.
+   */
   onSearchTermChange() {
-  if (this.searchTerm.trim() === "") {
-    this.pokemonList = [];
-    this.offset = 0;
-    this.loadPokemons();
+    if (this.searchTerm.trim() === "") {
+      this.pokemonList = [];
+      this.offset = 0;
+      this.loadPokemons();
+    }
   }
-}
 
+  /**
+   * Sorts the Pokemon list based on the selected order.
+   * - 'az': Sorts the list in ascending order by Pokemon name.
+   * - 'za': Sorts the list in descending order by Pokemon name.
+   * - 'original-order': Resets the list and loads the Pokemons in the original order.
+   */
   applySort() {
     switch (this.selectedOrder) {
       case 'az':
@@ -134,8 +160,31 @@ faMagnifyingGlass = faMagnifyingGlass;
     }
   }
 
-  goToDetails(pokemonName : string){
-    this.router.navigate(['pokemon-details', pokemonName]);
+  /**
+   * Toggles the favorite status of the given Pokemon and updates the list of favorite Pokemon IDs.
+   * @param event the event that triggered this function
+   * @param pokemon the Pokemon object
+   */
+  onStarClick(event: Event, pokemon: any) {
+    event.stopPropagation();
+    this.favoriteService.toggleFavorite(pokemon.id);
+    this.favoritePokemons = this.favoriteService.getFavoritePokemons();
+  }
+
+  /**
+   * Returns whether the given Pokemon is a favorite or not.
+   * @param pokemon the Pokemon object
+   * @returns true if the Pokemon is a favorite, false otherwise
+   */
+  isFavorite(pokemon: any): boolean {
+    return this.favoriteService.isFavorite(pokemon.id);
+  }
+
+  goToDetailPage(pokemon: any) {
+    this.pokeApiService.goToDetails(pokemon.name);
+  }
+
+  getPokemonImage(pokemon: any) {
+    return this.pokeApiService.getPokemonImage(pokemon);
   }
 }
-
