@@ -41,11 +41,11 @@ export class PokeApiService {
     return this.http.get<any>(url);
   }
 
-  getAllPokemonsByName(name : string): Observable<any> {
-    return this.http.get<any>(`https://pokeapi.co/api/v2/pokemon/${name}`);
+  getAllPokemonsByNameOrId(nameOrId : string): Observable<any> {
+    return this.http.get<any>(`https://pokeapi.co/api/v2/pokemon/${nameOrId}`);
   }
 
-   goToDetails(pokemonName : string){
-    this.router.navigate(['pokemon-details', pokemonName]);
+   goToDetails(pokemonNameOrId : string){
+    this.router.navigate(['pokemon-details', pokemonNameOrId]);
   }
 }
