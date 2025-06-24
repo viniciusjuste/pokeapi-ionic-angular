@@ -54,7 +54,7 @@ export class PokemonListComponent implements OnInit {
   * @returns A CSS linear-gradient string to be used as the card background.
   */
   getCardBackground(types: any[]): string {
-    const colors = types.map(t => this.typeColorService.getColor(t?.type?.name || ''));
+    const colors = types.map(t => this.typeColorService.getCardColor(t?.type?.name || ''));
 
     if (colors.length === 1) {
       return `linear-gradient(135deg, ${colors[0]} 0%, transparent 100%)`;
