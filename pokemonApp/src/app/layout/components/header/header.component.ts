@@ -5,6 +5,7 @@ import { FavoriteService } from 'src/app/services/favorite.service';
 import { PokeApiService } from 'src/app/services/poke-api.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -25,7 +26,8 @@ export class HeaderComponent {
   constructor(
     private favoriteService: FavoriteService,
     private pokeApiService: PokeApiService,
-    private eRef: ElementRef
+    private eRef: ElementRef,
+    private router : Router
   ) { }
 
   menuToggle() {
@@ -76,5 +78,9 @@ export class HeaderComponent {
     if (this.dropdownIsOpen && !this.eRef.nativeElement.contains(event.target)) {
       this.dropdownIsOpen = false;
     }
+  }
+
+  goToHome() {
+    this.router.navigate(['/home']);
   }
 }
