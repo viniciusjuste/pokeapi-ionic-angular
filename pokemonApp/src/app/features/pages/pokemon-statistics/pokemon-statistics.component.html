@@ -1,13 +1,15 @@
 <ion-content *ngIf="pokemon" class="ion-padding">
 
   <!-- Image and name -->
-  <ion-card class="h-64 flex justify-center items-center mt-8">
+  <ion-card class="h-64 flex justify-center items-center mt-8"
+    [ngStyle]="{ 'background': getCardBackground(pokemon.types) }">
     <img class="w-60 h-64 object-cover" [src]="pokemon.sprites.front_default" [alt]="pokemon.name">
     <ion-text class="my-auto flex flex-col">
-      <span class="block font-extrabold">#{{ pokemon.id }}</span>
-      <span class="block font-extrabold uppercase">{{ pokemon?.name }}</span>
+      <span class="block font-extrabold text-white">#{{ pokemon.id }}</span>
+      <span class="block font-extrabold uppercase text-white mb-4">{{ pokemon?.name }}</span>
       <div class="types-wrapper">
-        <span *ngFor="let type of pokemon.types" class="text-white py-2 pr-4 rounded-md inline-block mr-4">
+        <span *ngFor="let type of pokemon.types" class="text-white py-2 px-4 rounded-md inline-block mr-4"
+          [ngStyle]="{'background-color': getTypeColor(type.type.name)}">
           {{ type.type.name }}
         </span>
       </div>
@@ -18,7 +20,7 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Estatísticas</ion-card-title>
+        <ion-card-title>Statistics</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-list>
@@ -34,7 +36,7 @@
     </ion-card>
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Informações Gerais</ion-card-title>
+        <ion-card-title>General Information</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <p>Height: {{ pokemon.height / 10 }} m</p>
@@ -62,5 +64,5 @@
     <ion-img class="w-60 h-64 object-cover" [src]="pokemon.sprites.front_shiny" alt="Shiny Front"></ion-img>
     <ion-img class="w-60 h-64 object-cover" [src]="pokemon.sprites.back_shiny" alt="Shiny Back"></ion-img>
   </ion-card>
-  
+
 </ion-content>
