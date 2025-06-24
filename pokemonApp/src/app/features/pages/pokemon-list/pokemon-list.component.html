@@ -29,7 +29,7 @@
       class="w-[80%] md:w-[15rem] cursor-pointer hover:scale-105 transition-all duration-300"
       [ngStyle]="{ 'background': getCardBackground(pokemon.types) }">
       <div class="flex justify-between items-center p-4">
-        <span class="text-1xl">#{{ pokemon.id }}</span>
+        <span class="text-1xl text-white">#{{ pokemon.id }}</span>
         <fa-icon class="text-2xl z-20" [ngClass]="{'text-red-500': favoritePokemons.includes(pokemon.id)}"
           [icon]="faStar" (click)="onStarClick($event, pokemon)"></fa-icon>
       </div>
