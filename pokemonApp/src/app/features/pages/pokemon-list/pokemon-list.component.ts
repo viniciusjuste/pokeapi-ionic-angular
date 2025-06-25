@@ -110,6 +110,13 @@ export class PokemonListComponent implements OnInit {
     this.loadPokemons();
   }
 
+  loadPreviousPage() {
+    if (this.offset - this.limit >= 0) {
+      this.offset -= this.limit;
+      this.pokemonList.splice(-this.limit);
+    }
+  }
+
   /**
    * Filters the Pokemon list to only show Pokemon with a name matching the `searchTerm`.
    * @returns an observable of the filtered Pokemon list

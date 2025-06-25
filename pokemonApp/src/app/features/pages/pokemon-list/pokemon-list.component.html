@@ -55,4 +55,8 @@
     <ion-button (click)="loadNextPage()" [disabled]="loading">
       {{ loading ? 'Carregando...' : 'Carregar mais' }}
     </ion-button>
+
+    <ion-button (click)="loadPreviousPage()" [disabled]="loading">
+      {{ loading ? 'Carregando...' : 'Carregar menos' }}
+    </ion-button>
   </div>
