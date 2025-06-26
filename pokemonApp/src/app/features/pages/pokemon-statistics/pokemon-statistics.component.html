@@ -59,10 +59,17 @@
 
   <!-- Sprites pokemon -->
   <ion-card class="h-64 flex justify-center items-center">
-    <ion-img class="w-60 h-64 object-cover" [src]="pokemon.sprites.front_default" alt="Normal Front"></ion-img>
-    <ion-img class="w-60 h-64 object-cover" [src]="pokemon.sprites.back_default" alt="Normal Back"></ion-img>
-    <ion-img class="w-60 h-64 object-cover" [src]="pokemon.sprites.front_shiny" alt="Shiny Front"></ion-img>
-    <ion-img class="w-60 h-64 object-cover" [src]="pokemon.sprites.back_shiny" alt="Shiny Back"></ion-img>
+    <ion-img 
+    class="w-full max-w-xs h-auto object-cover"
+    [src]="pokemon.sprites.front_default" 
+    alt="Normal Front">
+  </ion-img>
+
+  <ion-img 
+    class="w-full max-w-xs h-auto object-cover"
+    [src]="pokemon.sprites.back_default" 
+    alt="Normal Back">
+  </ion-img>
   </ion-card>
 
 </ion-content>
