@@ -33,3 +33,9 @@ cd pokemon-ionic-angular-app
 npm install
 ionic serve
 ```
+
+## Project Demonstration
+
+Below is a visual demonstration of the app in action:
+
+![App Demonstration](assets/gifs/demo.gif)
