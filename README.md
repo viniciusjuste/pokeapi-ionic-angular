@@ -38,4 +38,4 @@ ionic serve
 
 Below is a visual demonstration of the app in action:
 
-![App Demonstration](assets/gifs/demo.gif)
+![App Demonstration](/pokemonApp/src/assets/gifs/demo.gif)
